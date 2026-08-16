@@ -100,4 +100,17 @@ def analyze_live_match(fixture: Dict, stats: List[Dict] = None) -> str:
     return text
 
 
-def simple_value_hint(home_goals: int, away_goals: int
+def simple_value_hint(home_goals: int, away_goals: int, elapsed: int) -> str:
+    """Простые эвристики для лайва"""
+    total = home_goals + away_goals
+    remaining = max(0, 90 - elapsed)
+
+    if elapsed < 60 and total == 0:
+        return "🔥 Высокий интерес к Over 1.5 / Over 2.5 и BTTS"
+    if elapsed < 75 and total == 1:
+        return "🔥 Интересно смотреть Over 2.5 и «обе забьют»"
+    if elapsed > 80 and total <= 1:
+        return "⚡ Возможны поздние голы, но вероятность уже снижена"
+    if remaining > 20 and total >= 3:
+        return "📉 Много голов уже есть — осторожнее с высокими тоталами"
+    return "📊 Смотри статистику и форму команд для более точного решения"
